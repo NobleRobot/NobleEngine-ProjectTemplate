@@ -1,0 +1,2 @@
+loopCount = 0
+frames = 1x5, 2x5, 3x5

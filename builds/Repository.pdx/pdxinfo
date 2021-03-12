@@ -1,0 +1,12 @@
+name=A Noble Engine Game
+author=A Developer
+description=This is a Noble Engine game.
+bundleID=com.yourdomain.GameName
+version=0.0.1
+buildNumber=1
+imagePath=assets/launcher/
+launchSoundPath=assets/launcher/sound.wav
+pdxversion=10000
+buildtime=668870702
+inputPath=D:\OneDrive\Noble Robot\Projects\Noble Engine\Repository/src
+sdkPath=C:\Program Files (x86)\Playdate

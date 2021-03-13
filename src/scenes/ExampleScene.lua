@@ -140,5 +140,5 @@ function ExampleScene:exit()
 end
 
 function ExampleScene:finish()
-	ExampleScene.super.exit(self)
+	ExampleScene.super.finish(self)
 end

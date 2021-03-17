@@ -1,1 +1,5 @@
 Store third-party libraries in this folder.
+
+This is also where the Noble Engine lives, because it, too, is a third-party library!
+
+If you've copied this project as a git template, the contents of the "libraries/noble" folder will be a git submodule, allowing you to keep it up to date seperately from your project's code.

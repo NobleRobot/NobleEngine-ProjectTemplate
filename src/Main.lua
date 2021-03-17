@@ -1,4 +1,4 @@
-import 'noble/Noble'
+import 'libraries/noble/Noble'
 
 import 'utilities/Utilities'
 

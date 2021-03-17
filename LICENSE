@@ -1,28 +1,15 @@
-Copyright notices
+Licenses
 
 --
 
-"noble/assets/images/NobleRobotLogo.png"
+Assets in: "source/assets/launcher/"
 
 © 2021 Mark LaCroix, Noble Robot
 
-You are granted a non-exclusive license to this version of the Noble Robot
-logo, solely for the purposes of providing credit, if you choose, in a
-resulting product which uses this software. You may not sell or create
-commercial derivative works from this asset, or use it in any other context.
-
-Where appropriate, and at your discretion, include the logo unmodified against
-a black background, or inverted against a white background, with a version of
-the following message:
-
-"Created with Noble Engine, by Noble Robot. https://noblerobot.com"
-
---
-
-"noble/libraries/"
-
-Sequence library by Nic Magnier
-Signal library by Dustin Mierau
+Assets in this folder are provided as a guide for users of this project
+template. They may be further distributed, without restriction, for that
+purpose only. Copying or modifying for commercial distribution is
+not allowed.
 
 --
 

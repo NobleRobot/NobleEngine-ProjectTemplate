@@ -1,0 +1,3 @@
+[submodule "Noble Engine"]
+	path = source/libraries/noble
+	url = https://github.com/NobleRobot/NobleEngine.git

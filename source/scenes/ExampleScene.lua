@@ -14,7 +14,7 @@ function ExampleScene:init()
 	ExampleScene.super.init(self)
 
 	background = Graphics.image.new("assets/images/background1")
-	logo = Graphics.image.new("noble/assets/images/NobleRobotLogo")
+	logo = Graphics.image.new("libraries/noble/assets/images/NobleRobotLogo")
 
 	local menuItemKeys = {
 		Noble.TransitionType.DIP_TO_BLACK,

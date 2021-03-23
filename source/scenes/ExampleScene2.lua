@@ -13,7 +13,7 @@ function ExampleScene2:init()
 	ExampleScene2.super.init(self)
 
 	background = Graphics.image.new("assets/images/background2")
-	logo = Graphics.image.new("noble/assets/images/NobleRobotLogo")
+	logo = Graphics.image.new("libraries/noble/assets/images/NobleRobotLogo")
 
 	local menuItemKeys = {
 		Noble.TransitionType.DIP_TO_BLACK,
@@ -103,7 +103,7 @@ function ExampleScene2:start()
 	ExampleScene2.super.start(self)
 
 	menu:setSelectedRow(1)
-	Noble.showCrankIndicator(true)
+	Noble.Input.activateCrankIndicator(true)
 
 end
 
@@ -130,7 +130,7 @@ end
 function ExampleScene2:exit()
 	ExampleScene2.super.exit(self)
 
-	Noble.showCrankIndicator(false)
+	Noble.Input.activateCrankIndicator(false)
 	sequence = Sequence.new():from(100):to(240, 0.25, Ease.inSine)
 	sequence:start();
 

@@ -3,11 +3,10 @@ class("ExampleScene2").extends(NobleScene)
 
 ExampleScene2.baseColor = Graphics.kColorBlack
 
-local background = nil
-local logo = nil
-
-local menu = nil
-local sequence = nil
+local background
+local logo
+local menu
+local sequence
 
 function ExampleScene2:init()
 	ExampleScene2.super.init(self)
@@ -15,7 +14,7 @@ function ExampleScene2:init()
 	background = Graphics.image.new("assets/images/background2")
 	logo = Graphics.image.new("libraries/noble/assets/images/NobleRobotLogo")
 
-	menu = Noble.Menu.new(true, Noble.Text.ALIGN_LEFT, false, Graphics.kColorBlack, 4,6,0, Noble.Text.FONT_SMALL)
+	menu = Noble.Menu.new(false, Noble.Text.ALIGN_LEFT, false, Graphics.kColorBlack, 4,6,0, Noble.Text.FONT_SMALL)
 
 	menu:addItem(Noble.TransitionType.DIP_TO_BLACK, function() Noble.transition(ExampleScene, 1, Noble.TransitionType.DIP_TO_BLACK) end)
 	menu:addItem(Noble.TransitionType.DIP_TO_WHITE, function() Noble.transition(ExampleScene, 1, Noble.TransitionType.DIP_TO_WHITE) end)
@@ -27,12 +26,13 @@ function ExampleScene2:init()
 	menu:addItem(Noble.TransitionType.SLIDE_OFF_LEFT, function() Noble.transition(ExampleScene, 1, Noble.TransitionType.SLIDE_OFF_LEFT) end)
 	menu:addItem(Noble.TransitionType.SLIDE_OFF_RIGHT, function() Noble.transition(ExampleScene, 1, Noble.TransitionType.SLIDE_OFF_RIGHT) end)
 	menu:addItem(
-		"Change Score: " .. Noble.GameData.get("Score"),
+		"Score",
 		function()
 			local newValue = math.random(100,99999)
 			Noble.GameData.set("Score", newValue)
-			menuItemKeys[10] = "Change Score: " .. newValue
-		end
+			menu:setItemDisplayName("Score", "Change Score: " .. newValue)
+		end, nil,
+		"Change Score: " .. Noble.GameData.get("Score")
 	)
 
 	local crankTick = 0
@@ -72,7 +72,7 @@ end
 function ExampleScene2:start()
 	ExampleScene2.super.start(self)
 
-	menu:setSelectedRow(1)
+	menu:activate()
 	Noble.Input.setCrankIndicatorStatus(true)
 
 end

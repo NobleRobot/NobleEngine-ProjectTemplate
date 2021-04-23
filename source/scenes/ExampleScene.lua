@@ -3,12 +3,12 @@ class("ExampleScene").extends(NobleScene)
 
 ExampleScene.baseColor = Graphics.kColorWhite
 
-local background = nil
-local logo = nil
+local background
+local logo
+local menu
+local sequence
 
-local menu = nil
-
-local sequence = nil
+local difficultyValues = {"Rare", "Medium", "Well Done"}
 
 function ExampleScene:init()
 	ExampleScene.super.init(self)
@@ -16,7 +16,7 @@ function ExampleScene:init()
 	background = Graphics.image.new("assets/images/background1")
 	logo = Graphics.image.new("libraries/noble/assets/images/NobleRobotLogo")
 
-	menu = Noble.Menu.new(true, Noble.Text.ALIGN_LEFT, false, Graphics.kColorWhite, 4,6,0, Noble.Text.FONT_SMALL)
+	menu = Noble.Menu.new(false, Noble.Text.ALIGN_LEFT, false, Graphics.kColorWhite, 4,6,0, Noble.Text.FONT_SMALL)
 
 	menu:addItem(Noble.TransitionType.DIP_TO_BLACK, function() Noble.transition(ExampleScene2, 1, Noble.TransitionType.DIP_TO_BLACK) end)
 	menu:addItem(Noble.TransitionType.DIP_TO_WHITE, function() Noble.transition(ExampleScene2, 1, Noble.TransitionType.DIP_TO_WHITE) end)
@@ -28,12 +28,15 @@ function ExampleScene:init()
 	menu:addItem(Noble.TransitionType.SLIDE_OFF_LEFT, function() Noble.transition(ExampleScene2, 1, Noble.TransitionType.SLIDE_OFF_LEFT) end)
 	menu:addItem(Noble.TransitionType.SLIDE_OFF_RIGHT, function() Noble.transition(ExampleScene2, 1, Noble.TransitionType.SLIDE_OFF_RIGHT) end)
 	menu:addItem(
-		"Difficulty: " .. Noble.Settings.get("Difficulty"),
+		"Difficulty",
 		function()
-			local newValue = math.ringInt(table.indexOfElement(difficultyValues, Noble.Settings.get("Difficulty"))+1, 1, 3)
+			local oldValue = Noble.Settings.get("Difficulty")
+			local newValue = math.ringInt(table.indexOfElement(difficultyValues, oldValue)+1, 1, 3)
 			Noble.Settings.set("Difficulty", difficultyValues[newValue])
-			menuItemKeys[10] = "Difficulty: " .. difficultyValues[newValue]
-		end
+			menu:setItemDisplayName("Difficulty", "Difficulty: " .. difficultyValues[newValue])
+		end,
+		nil,
+		"Difficulty: " .. Noble.Settings.get("Difficulty")
 	)
 
 	local crankTick = 0
@@ -73,7 +76,7 @@ end
 function ExampleScene:start()
 	ExampleScene.super.start(self)
 
-	menu:setSelectedRow(1)
+	menu:activate()
 	Noble.Input.setCrankIndicatorStatus(true)
 
 end

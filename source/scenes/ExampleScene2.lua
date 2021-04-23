@@ -35,6 +35,8 @@ function ExampleScene2:init()
 		end
 	)
 
+	menu:activate()
+
 	local crankTick = 0
 
 	ExampleScene2.inputHandler = {

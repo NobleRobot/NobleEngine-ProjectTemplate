@@ -74,7 +74,7 @@ function ExampleScene:start()
 	ExampleScene.super.start(self)
 
 	menu:setSelectedRow(1)
-	Noble.Input.activateCrankIndicator(true)
+	Noble.Input.setCrankIndicatorStatus(true)
 
 end
 
@@ -102,7 +102,7 @@ end
 function ExampleScene:exit()
 	ExampleScene.super.exit(self)
 
-	Noble.Input.activateCrankIndicator(false)
+	Noble.Input.setCrankIndicatorStatus(false)
 	sequence = Sequence.new():from(100):to(240, 0.25, Ease.inSine)
 	sequence:start();
 

@@ -1,15 +1,16 @@
 ExampleScene2 = {}
 class("ExampleScene2").extends(NobleScene)
+local scene = ExampleScene2
 
-ExampleScene2.baseColor = Graphics.kColorBlack
+scene.baseColor = Graphics.kColorBlack
 
 local background
 local logo
 local menu
 local sequence
 
-function ExampleScene2:init()
-	ExampleScene2.super.init(self)
+function scene:init()
+	scene.super.init(self)
 
 	background = Graphics.image.new("assets/images/background2")
 	logo = Graphics.image.new("libraries/noble/assets/images/NobleRobotLogo")
@@ -37,7 +38,7 @@ function ExampleScene2:init()
 
 	local crankTick = 0
 
-	ExampleScene2.inputHandler = {
+	scene.inputHandler = {
 		upButtonDown = function()
 			menu:selectPrevious()
 		end,
@@ -61,30 +62,30 @@ function ExampleScene2:init()
 
 end
 
-function ExampleScene2:enter()
-	ExampleScene2.super.enter(self)
+function scene:enter()
+	scene.super.enter(self)
 
 	sequence = Sequence.new():from(0):to(100, 1.5, Ease.outBounce)
 	sequence:start();
 
 end
 
-function ExampleScene2:start()
-	ExampleScene2.super.start(self)
+function scene:start()
+	scene.super.start(self)
 
 	menu:activate()
 	Noble.Input.setCrankIndicatorStatus(true)
 
 end
 
-function ExampleScene2:drawBackground()
-	ExampleScene2.super.drawBackground(self)
+function scene:drawBackground()
+	scene.super.drawBackground(self)
 
 	background:draw(0, 0)
 end
 
-function ExampleScene2:update()
-	ExampleScene2.super.update(self)
+function scene:update()
+	scene.super.update(self)
 
 	Graphics.setColor(Graphics.kColorWhite)
 	Graphics.setDitherPattern(0.2, Graphics.image.kDitherTypeScreen)
@@ -98,8 +99,8 @@ function ExampleScene2:update()
 
 end
 
-function ExampleScene2:exit()
-	ExampleScene2.super.exit(self)
+function scene:exit()
+	scene.super.exit(self)
 
 	Noble.Input.setCrankIndicatorStatus(false)
 	sequence = Sequence.new():from(100):to(240, 0.25, Ease.inSine)
@@ -107,6 +108,6 @@ function ExampleScene2:exit()
 
 end
 
-function ExampleScene2:finish()
-	ExampleScene2.super.finish(self)
+function scene:finish()
+	scene.super.finish(self)
 end

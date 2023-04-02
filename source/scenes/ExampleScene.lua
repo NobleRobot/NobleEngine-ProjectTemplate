@@ -1,7 +1,8 @@
 ExampleScene = {}
 class("ExampleScene").extends(NobleScene)
+local scene = ExampleScene
 
-ExampleScene.baseColor = Graphics.kColorWhite
+scene.baseColor = Graphics.kColorWhite
 
 local background
 local logo
@@ -10,8 +11,8 @@ local sequence
 
 local difficultyValues = {"Rare", "Medium", "Well Done"}
 
-function ExampleScene:init()
-	ExampleScene.super.init(self)
+function scene:init()
+	scene.super.init(self)
 
 	background = Graphics.image.new("assets/images/background1")
 	logo = Graphics.image.new("libraries/noble/assets/images/NobleRobotLogo")
@@ -41,7 +42,7 @@ function ExampleScene:init()
 
 	local crankTick = 0
 
-	ExampleScene.inputHandler = {
+	scene.inputHandler = {
 		upButtonDown = function()
 			menu:selectPrevious()
 		end,
@@ -65,30 +66,30 @@ function ExampleScene:init()
 
 end
 
-function ExampleScene:enter()
-	ExampleScene.super.enter(self)
+function scene:enter()
+	scene.super.enter(self)
 
 	sequence = Sequence.new():from(0):to(100, 1.5, Ease.outBounce)
 	sequence:start();
 
 end
 
-function ExampleScene:start()
-	ExampleScene.super.start(self)
+function scene:start()
+	scene.super.start(self)
 
 	menu:activate()
 	Noble.Input.setCrankIndicatorStatus(true)
 
 end
 
-function ExampleScene:drawBackground()
-	ExampleScene.super.drawBackground(self)
+function scene:drawBackground()
+	scene.super.drawBackground(self)
 
 	background:draw(0, 0)
 end
 
-function ExampleScene:update()
-	ExampleScene.super.update(self)
+function scene:update()
+	scene.super.update(self)
 
 	Graphics.setColor(Graphics.kColorBlack)
 	Graphics.setDitherPattern(0.2, Graphics.image.kDitherTypeScreen)
@@ -102,8 +103,8 @@ function ExampleScene:update()
 
 end
 
-function ExampleScene:exit()
-	ExampleScene.super.exit(self)
+function scene:exit()
+	scene.super.exit(self)
 
 	Noble.Input.setCrankIndicatorStatus(false)
 	sequence = Sequence.new():from(100):to(240, 0.25, Ease.inSine)
@@ -111,6 +112,6 @@ function ExampleScene:exit()
 
 end
 
-function ExampleScene:finish()
-	ExampleScene.super.finish(self)
+function scene:finish()
+	scene.super.finish(self)
 end

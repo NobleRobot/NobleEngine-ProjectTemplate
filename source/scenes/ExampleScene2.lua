@@ -6,6 +6,7 @@ scene.baseColor = Graphics.kColorBlack
 
 local background <const> = Graphics.image.new("assets/images/background2")
 local logo <const> = Graphics.image.new("libraries/noble/assets/images/NobleRobotLogo")
+local swipe_it <const> = Graphics.imagetable.new("assets/images/swipe")
 local menu
 local sequence
 
@@ -18,7 +19,7 @@ function scene:init()
 	menu:addItem("Dip Metro Nexus", function() Noble.transition(ExampleScene, 2, Noble.Transition.DipMetroNexus) end)
 	menu:addItem("Dip Widget Satchel", function() Noble.transition(ExampleScene, 2, Noble.Transition.DipWidgetSatchel) end)
 	menu:addItem("Cross Dissolve", function() Noble.transition(ExampleScene, 2, Noble.Transition.CrossDissolve) end)
-	menu:addItem("Animation", function() Noble.transition(ExampleScene, 2, Noble.Transition.Animation) end)
+	menu:addItem("Animation", function() Noble.transition(ExampleScene, 2, Noble.Transition.Animation, nil, nil, swipe_it) end)
 	menu:addItem("Slide Off (Up)", function() Noble.transition(ExampleScene, 1.5, Noble.Transition.SlideOffUp) end)
 	menu:addItem("Slide Off (Down)", function() Noble.transition(ExampleScene, 1.5, Noble.Transition.SlideOffDown) end)
 	menu:addItem("Slide Off (Left)", function() Noble.transition(ExampleScene, 1.5, Noble.Transition.SlideOffLeft) end)

@@ -19,9 +19,10 @@ function scene:init()
 	menu:addItem("Dip To Black", function() Noble.transition(ExampleScene2, 1, Noble.Transition.DipToBlack) end)
 	menu:addItem("Dip To White", function() Noble.transition(ExampleScene2, 1, Noble.Transition.DipToWhite) end)
 	menu:addItem("Dip Metro Nexus", function() Noble.transition(ExampleScene2, 2, Noble.Transition.DipMetroNexus) end)
-	menu:addItem("Dip Widget Satchel", function() Noble.transition(ExampleScene2, 2, Noble.Transition.DipWidgetSatchel) end)
+	menu:addItem("Dip Widget Satchel", function() Noble.transition(ExampleScene2, 2, Noble.Transition.DipWidgetSatchel, nil, Ease.outBounce) end)
 	menu:addItem("Cross Dissolve", function() Noble.transition(ExampleScene2, 2, Noble.Transition.CrossDissolve) end)
 	menu:addItem("Animation", function() Noble.transition(ExampleScene2, 2, Noble.Transition.Animation, nil, nil, swipe_it) end)
+	menu:addItem("Spotlight", function() Noble.transition(ExampleScene2, 2.5, Noble.Transition.Spotlight, nil, Ease.inOutCirc, 325, 21, 107, 120) end)
 	menu:addItem("Slide Off (Up)", function() Noble.transition(ExampleScene2, 1.5, Noble.Transition.SlideOffUp) end)
 	menu:addItem("Slide Off (Down)", function() Noble.transition(ExampleScene2, 1.5, Noble.Transition.SlideOffDown) end)
 	menu:addItem("Slide Off (Left)", function() Noble.transition(ExampleScene2, 1.5, Noble.Transition.SlideOffLeft) end)
@@ -67,7 +68,7 @@ end
 function scene:enter()
 	scene.super.enter(self)
 
-	sequence = Sequence.new():from(0):to(100, 1.5, Ease.outBounce)
+	sequence = Sequence.new():from(0):to(80, 1.5, Ease.outBounce)
 	sequence:start();
 end
 
@@ -88,8 +89,8 @@ function scene:update()
 	scene.super.update(self)
 
 	Graphics.setColor(Graphics.kColorBlack)
-	Graphics.fillRoundRect(15, (sequence:get()*0.75)+3, 185, 155, 15)
-	menu:draw(30, sequence:get()-15 or 100-15)
+	Graphics.fillRoundRect(15, (sequence:get()*0.75)+3, 185, 165, 15)
+	menu:draw(30, sequence:get()-15 or 80-15)
 
 	Graphics.setColor(Graphics.kColorWhite)
 	Graphics.fillRoundRect(260, -20, 130, 65, 15)
@@ -103,7 +104,6 @@ function scene:exit()
 	Noble.Input.setCrankIndicatorStatus(false)
 	sequence = Sequence.new():from(100):to(315, 0.25, Ease.inSine)
 	sequence:start();
-
 end
 
 function scene:finish()

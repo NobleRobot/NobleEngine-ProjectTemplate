@@ -1,113 +1,42 @@
 ExampleScene2 = {}
-class("ExampleScene2").extends(NobleScene)
+class("ExampleScene2").extends(ExampleScene)
 local scene = ExampleScene2
 
-scene.baseColor = Graphics.kColorBlack
+function scene:setValues()
+	scene.super.setValues(self)
+	self.background = Graphics.image.new("assets/images/background2")
+	self.color1 = Graphics.kColorWhite
+	self.color2 = Graphics.kColorBlack
+	self.menuX = 200
+end
 
-local background
-local logo
-local menu
-local sequence
-
-function scene:init()
-	scene.super.init(self)
-
-	background = Graphics.image.new("assets/images/background2")
-	logo = Graphics.image.new("libraries/noble/assets/images/NobleRobotLogo")
-
-	menu = Noble.Menu.new(false, Noble.Text.ALIGN_LEFT, false, Graphics.kColorBlack, 4,6,0, Noble.Text.FONT_SMALL)
-
-	menu:addItem(Noble.TransitionType.DIP_TO_BLACK, function() Noble.transition(ExampleScene, 1, Noble.TransitionType.DIP_TO_BLACK) end)
-	menu:addItem(Noble.TransitionType.DIP_TO_WHITE, function() Noble.transition(ExampleScene, 1, Noble.TransitionType.DIP_TO_WHITE) end)
-	menu:addItem(Noble.TransitionType.DIP_METRO_NEXUS, function() Noble.transition(ExampleScene, 1, Noble.TransitionType.DIP_METRO_NEXUS) end)
-	menu:addItem(Noble.TransitionType.DIP_WIDGET_SATCHEL, function() Noble.transition(ExampleScene, 1, Noble.TransitionType.DIP_WIDGET_SATCHEL) end)
-	menu:addItem(Noble.TransitionType.CROSS_DISSOLVE, function() Noble.transition(ExampleScene, 1, Noble.TransitionType.CROSS_DISSOLVE) end)
-	menu:addItem(Noble.TransitionType.SLIDE_OFF_UP, function() Noble.transition(ExampleScene, 1, Noble.TransitionType.SLIDE_OFF_UP) end)
-	menu:addItem(Noble.TransitionType.SLIDE_OFF_DOWN, function() Noble.transition(ExampleScene, 1, Noble.TransitionType.SLIDE_OFF_DOWN) end)
-	menu:addItem(Noble.TransitionType.SLIDE_OFF_LEFT, function() Noble.transition(ExampleScene, 1, Noble.TransitionType.SLIDE_OFF_LEFT) end)
-	menu:addItem(Noble.TransitionType.SLIDE_OFF_RIGHT, function() Noble.transition(ExampleScene, 1, Noble.TransitionType.SLIDE_OFF_RIGHT) end)
-	menu:addItem(
-		"Score",
-		function()
-			local newValue = math.random(100,99999)
-			Noble.GameData.set("Score", newValue)
-			menu:setItemDisplayName("Score", "Change Score: " .. newValue)
-		end, nil,
-		"Change Score: " .. Noble.GameData.get("Score")
-	)
-
-	local crankTick = 0
-
-	scene.inputHandler = {
-		upButtonDown = function()
-			menu:selectPrevious()
-		end,
-		downButtonDown = function()
-			menu:selectNext()
-		end,
-		cranked = function(change, acceleratedChange)
-			crankTick = crankTick + change
-			if (crankTick > 30) then
-				crankTick = 0
-				menu:selectNext()
-			elseif (crankTick < -30) then
-				crankTick = 0
-				menu:selectPrevious()
-			end
-		end,
-		AButtonDown = function()
-			menu:click()
-		end
-	}
+function scene:setupMenu(__menu)
+	__menu:addItem(Noble.Transition.MetroNexus.name,			function() Noble.transition(ExampleScene, nil, Noble.Transition.MetroNexus) end)
+	__menu:addItem(Noble.Transition.WidgetSatchel.name,			function() Noble.transition(ExampleScene, nil, Noble.Transition.WidgetSatchel) end)
+	__menu:addItem(Noble.Transition.SlideOffUp.name,			function() Noble.transition(ExampleScene, nil, Noble.Transition.SlideOffUp) end)
+	__menu:addItem(Noble.Transition.SlideOffDown.name,			function() Noble.transition(ExampleScene, nil, Noble.Transition.SlideOffDown) end)
+	__menu:addItem(Noble.Transition.SlideOffLeft.name,			function() Noble.transition(ExampleScene, nil, Noble.Transition.SlideOffLeft) end)
+	__menu:addItem(Noble.Transition.SlideOffRight.name,			function() Noble.transition(ExampleScene, nil, Noble.Transition.SlideOffRight) end)
+	__menu:addItem(Noble.Transition.SlideOnUp.name,				function() Noble.transition(ExampleScene, nil, Noble.Transition.SlideOnUp) end)
+	__menu:addItem(Noble.Transition.SlideOnDown.name,			function() Noble.transition(ExampleScene, nil, Noble.Transition.SlideOnDown) end)
+	__menu:addItem(Noble.Transition.SlideOnLeft.name,			function() Noble.transition(ExampleScene, nil, Noble.Transition.SlideOnLeft) end)
+	__menu:addItem(Noble.Transition.SlideOnRight.name,			function() Noble.transition(ExampleScene, nil, Noble.Transition.SlideOnRight) end)
+	__menu:addItem(Noble.Transition.SlideOff.name.." (Custom)",	function() Noble.transition(ExampleScene, nil, Noble.Transition.SlideOff, {
+		x = 400,
+		y = 150,
+		rotation = 45
+	}) end)
+	__menu:addItem(Noble.Transition.SlideOn.name.." (Custom)",	function() Noble.transition(ExampleScene, nil, Noble.Transition.SlideOn, {
+		x = -400,
+		y = -150,
+		rotation = 45
+	}) end)
 
 end
 
-function scene:enter()
-	scene.super.enter(self)
-
-	sequence = Sequence.new():from(0):to(100, 1.5, Ease.outBounce)
-	sequence:start();
-
-end
-
-function scene:start()
-	scene.super.start(self)
-
-	menu:activate()
-	Noble.Input.setCrankIndicatorStatus(true)
-
-end
-
-function scene:drawBackground()
-	scene.super.drawBackground(self)
-
-	background:draw(0, 0)
-end
-
-function scene:update()
-	scene.super.update(self)
-
-	Graphics.setColor(Graphics.kColorWhite)
-	Graphics.setDitherPattern(0.2, Graphics.image.kDitherTypeScreen)
-	Graphics.fillRoundRect(15, (sequence:get()*0.75)+3, 185, 145, 15)
-	menu:draw(30, sequence:get()-15 or 100-15)
-
-	Graphics.setColor(Graphics.kColorBlack)
-	Graphics.fillRoundRect(260, -20, 130, 65, 15)
-	logo:setInverted(false)
-	logo:draw(275, 8)
-
-end
-
-function scene:exit()
-	scene.super.exit(self)
-
-	Noble.Input.setCrankIndicatorStatus(false)
-	sequence = Sequence.new():from(100):to(240, 0.25, Ease.inSine)
-	sequence:start();
-
-end
-
-function scene:finish()
-	scene.super.finish(self)
+function scene:drawLogo()
+	Graphics.setColor(self.color2)
+	Graphics.fillRoundRect(10, 240-45, 130, 65, 15)
+	self.logo:setInverted(false)
+	self.logo:draw(25, 240-27-10)
 end

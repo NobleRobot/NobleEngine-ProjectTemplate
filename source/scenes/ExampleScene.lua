@@ -2,65 +2,54 @@ ExampleScene = {}
 class("ExampleScene").extends(NobleScene)
 local scene = ExampleScene
 
-scene.baseColor = Graphics.kColorWhite
+function scene:setValues()
+	self.background = Graphics.image.new("assets/images/background1")
 
-local background
-local logo
-local menu
-local sequence
+	self.color1 = Graphics.kColorBlack
+	self.color2 = Graphics.kColorWhite
 
-local difficultyValues = {"Rare", "Medium", "Well Done"}
+	self.menu = nil
+	self.sequence = nil
+
+	self.menuX = 15
+
+	self.menuYFrom = -50
+	self.menuY = 15
+	self.menuYTo = 240
+end
 
 function scene:init()
 	scene.super.init(self)
 
-	background = Graphics.image.new("assets/images/background1")
-	logo = Graphics.image.new("libraries/noble/assets/images/NobleRobotLogo")
+	self.logo = Graphics.image.new("libraries/noble/assets/images/NobleRobotLogo")
 
-	menu = Noble.Menu.new(false, Noble.Text.ALIGN_LEFT, false, Graphics.kColorWhite, 4,6,0, Noble.Text.FONT_SMALL)
+	self:setValues()
 
-	menu:addItem(Noble.TransitionType.DIP_TO_BLACK, function() Noble.transition(ExampleScene2, 1, Noble.TransitionType.DIP_TO_BLACK) end)
-	menu:addItem(Noble.TransitionType.DIP_TO_WHITE, function() Noble.transition(ExampleScene2, 1, Noble.TransitionType.DIP_TO_WHITE) end)
-	menu:addItem(Noble.TransitionType.DIP_METRO_NEXUS, function() Noble.transition(ExampleScene2, 1, Noble.TransitionType.DIP_METRO_NEXUS) end)
-	menu:addItem(Noble.TransitionType.DIP_WIDGET_SATCHEL, function() Noble.transition(ExampleScene2, 1, Noble.TransitionType.DIP_WIDGET_SATCHEL) end)
-	menu:addItem(Noble.TransitionType.CROSS_DISSOLVE, function() Noble.transition(ExampleScene2, 1, Noble.TransitionType.CROSS_DISSOLVE) end)
-	menu:addItem(Noble.TransitionType.SLIDE_OFF_UP, function() Noble.transition(ExampleScene2, 1, Noble.TransitionType.SLIDE_OFF_UP) end)
-	menu:addItem(Noble.TransitionType.SLIDE_OFF_DOWN, function() Noble.transition(ExampleScene2, 1, Noble.TransitionType.SLIDE_OFF_DOWN) end)
-	menu:addItem(Noble.TransitionType.SLIDE_OFF_LEFT, function() Noble.transition(ExampleScene2, 1, Noble.TransitionType.SLIDE_OFF_LEFT) end)
-	menu:addItem(Noble.TransitionType.SLIDE_OFF_RIGHT, function() Noble.transition(ExampleScene2, 1, Noble.TransitionType.SLIDE_OFF_RIGHT) end)
-	menu:addItem(
-		"Difficulty",
-		function()
-			local oldValue = Noble.Settings.get("Difficulty")
-			local newValue = math.ringInt(table.indexOfElement(difficultyValues, oldValue)+1, 1, 3)
-			Noble.Settings.set("Difficulty", difficultyValues[newValue])
-			menu:setItemDisplayName("Difficulty", "Difficulty: " .. difficultyValues[newValue])
-		end,
-		nil,
-		"Difficulty: " .. Noble.Settings.get("Difficulty")
-	)
+	self.menu = Noble.Menu.new(false, Noble.Text.ALIGN_LEFT, false, self.color2, 4,6,0, Noble.Text.FONT_SMALL)
+
+	self:setupMenu(self.menu)
 
 	local crankTick = 0
 
-	scene.inputHandler = {
+	self.inputHandler = {
 		upButtonDown = function()
-			menu:selectPrevious()
+			self.menu:selectPrevious()
 		end,
 		downButtonDown = function()
-			menu:selectNext()
+			self.menu:selectNext()
 		end,
 		cranked = function(change, acceleratedChange)
 			crankTick = crankTick + change
 			if (crankTick > 30) then
 				crankTick = 0
-				menu:selectNext()
+				self.menu:selectNext()
 			elseif (crankTick < -30) then
 				crankTick = 0
-				menu:selectPrevious()
+				self.menu:selectPrevious()
 			end
 		end,
 		AButtonDown = function()
-			menu:click()
+			self.menu:click()
 		end
 	}
 
@@ -68,50 +57,65 @@ end
 
 function scene:enter()
 	scene.super.enter(self)
-
-	sequence = Sequence.new():from(0):to(100, 1.5, Ease.outBounce)
-	sequence:start();
-
+	self.sequence = Sequence.new():from(self.menuYFrom):to(self.menuY, 1.5, Ease.outBounce):start()
 end
 
 function scene:start()
 	scene.super.start(self)
 
-	menu:activate()
-	Noble.Input.setCrankIndicatorStatus(true)
-
+	self.menu:activate()
 end
 
 function scene:drawBackground()
 	scene.super.drawBackground(self)
 
-	background:draw(0, 0)
+	self.background:draw(0, 0)
 end
 
 function scene:update()
 	scene.super.update(self)
 
-	Graphics.setColor(Graphics.kColorBlack)
+	Graphics.setColor(self.color1)
 	Graphics.setDitherPattern(0.2, Graphics.image.kDitherTypeScreen)
-	Graphics.fillRoundRect(15, (sequence:get()*0.75)+3, 185, 145, 15)
-	menu:draw(30, sequence:get()-15 or 100-15)
+	Graphics.fillRoundRect(self.menuX, self.sequence:get() or self.menuY, 185, 200, 15)
+	self.menu:draw(self.menuX+15, self.sequence:get() + 8 or self.menuY+8)
 
-	Graphics.setColor(Graphics.kColorWhite)
-	Graphics.fillRoundRect(260, -20, 130, 65, 15)
-	logo:setInverted(true)
-	logo:draw(275, 8)
+	self:drawLogo()
+
+	Graphics.setColor(Graphics.kColorBlack)
 
 end
 
 function scene:exit()
 	scene.super.exit(self)
-
-	Noble.Input.setCrankIndicatorStatus(false)
-	sequence = Sequence.new():from(100):to(240, 0.25, Ease.inSine)
-	sequence:start();
-
+	self.sequence = Sequence.new():from(self.menuY):to(self.menuYTo, 0.5, Ease.inSine)
+	self.sequence:start();
 end
 
-function scene:finish()
-	scene.super.finish(self)
+function scene:setupMenu(__menu)
+	__menu:addItem(Noble.Transition.Cut.name,						function() Noble.transition(ExampleScene2, nil, Noble.Transition.Cut) end)
+	__menu:addItem(Noble.Transition.CrossDissolve.name,				function() Noble.transition(ExampleScene2, nil, Noble.Transition.CrossDissolve) end)
+	__menu:addItem(Noble.Transition.DipToBlack.name,				function() Noble.transition(ExampleScene2, nil, Noble.Transition.DipToBlack) end)
+	__menu:addItem(Noble.Transition.DipToWhite.name,				function() Noble.transition(ExampleScene2, nil, Noble.Transition.DipToWhite) end)
+	__menu:addItem(Noble.Transition.Imagetable.name.." (Bolt)",		function() Noble.transition(ExampleScene2, nil, Noble.Transition.Imagetable) end)
+	__menu:addItem(Noble.Transition.Imagetable.name.." (Curtain)",	function() Noble.transition(ExampleScene2, nil, Noble.Transition.Imagetable, {
+		imagetable = Graphics.imagetable.new("libraries/noble/assets/images/ImagetableTransition"),
+		rotateExit = true
+	}) end)
+	__menu:addItem(Noble.Transition.ImagetableMask.name,			function() Noble.transition(ExampleScene2, nil, Noble.Transition.ImagetableMask, {
+		imagetable = Graphics.imagetable.new("libraries/noble/assets/images/ImagetableTransition")
+	}) end)
+	__menu:addItem(Noble.Transition.Spotlight.name,					function() Noble.transition(ExampleScene2, nil, Noble.Transition.Spotlight, {
+		invert = true, xEnterStart = 50, yEnterStart = 50, xEnterEnd = 250, yEnterEnd = 200,
+	}) end)
+	__menu:addItem(Noble.Transition.SpotlightMask.name,				function() Noble.transition(ExampleScene2, nil, Noble.Transition.SpotlightMask, {
+		invert = true
+	}) end)
+end
+
+function scene:drawLogo()
+	Graphics.setColor(self.color2)
+	Graphics.fillRoundRect(260, -20, 130, 65, 15)
+	self.logo:setInverted(true)
+	self.logo:draw(275, 8)
 end
